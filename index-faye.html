@@ -1,0 +1,34 @@
+<html>
+<title>Dante</title>
+<head>
+<script>
+    var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+    var address = protocol + window.location.host + window.location.pathname + '/ws';
+    var socket = new WebSocket(address);
+    var body;
+
+    function addLine(line) {
+        body = body || document.getElementsByTagName('body')[0];
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(line));
+        body.appendChild(div);              
+    }
+
+    socket.onmessage = function (msg) {
+        addLine(msg.data);
+    };
+
+    socket.onerror = function (e) {
+        addLine('Unable to establish WebSocket connection to ' + address);
+    };
+
+    socket.onclose = function () {
+        addLine('WebSocket connection is closed.');
+    };
+
+</script>
+</head>
+<body>
+    <h1>Dante over WebSockets with faye-websockets</h1>
+</body>
+</html>
